@@ -363,6 +363,7 @@
             transition: all 0.3s;
             border: 1px solid var(--border);
             height: 100%;
+            position: relative;
         }
         
         .card:hover {
@@ -457,40 +458,51 @@
             direction: rtl;
         }
         
-        /* FIXED COPY BUTTON - Smaller and better positioned */
+        /* FIXED COPY BUTTON - Left side, transparent, icon-only */
         .copy-btn {
             position: absolute;
-            top: 8px;
-            left: auto;
-            right: 8px;
-            background: white;
-            border: 1px solid var(--border);
+            top: 10px;
+            left: 10px;
+            right: auto;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             color: var(--primary);
-            padding: 6px 12px;
+            padding: 6px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 500;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 4px;
             transition: all 0.2s;
             z-index: 10;
-            box-shadow: var(--shadow);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             font-family: inherit;
-            font-size: 0.8rem;
-            white-space: nowrap;
+            font-size: 0.9rem;
+            width: 36px;
+            height: 36px;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
         }
         
         .copy-btn:hover {
             background: var(--primary);
             color: white;
             transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
         
         .copy-btn.copied {
             background: var(--success);
             color: white;
             border-color: var(--success);
+            width: auto;
+            padding: 6px 12px;
+        }
+        
+        .copy-btn.copied i {
+            margin-left: 4px;
         }
         
         .card-footer {
@@ -735,30 +747,6 @@
             
             .debug-panel {
                 display: none;
-            }
-            
-            .copy-btn {
-                padding: 4px 8px;
-                font-size: 0.75rem;
-                gap: 3px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .copy-btn span {
-                display: none;
-            }
-            
-            .copy-btn {
-                width: 32px;
-                height: 32px;
-                padding: 0;
-                justify-content: center;
-                border-radius: 50%;
-            }
-            
-            .copy-btn i {
-                margin: 0;
             }
         }
         
@@ -1148,14 +1136,19 @@
             
             // Visual feedback on button
             if (button) {
-                const originalText = button.innerHTML;
-                button.innerHTML = '<i class="fas fa-check"></i> <span>تم النسخ</span>';
+                const originalHTML = button.innerHTML;
+                const originalWidth = button.style.width;
+                const originalClasses = button.className;
+                
+                // Change to "تم النسخ" with check icon
+                button.innerHTML = '<i class="fas fa-check"></i> تم النسخ';
                 button.classList.add('copied');
                 
                 // Reset button after 2 seconds
                 setTimeout(() => {
-                    button.innerHTML = originalText;
-                    button.classList.remove('copied');
+                    button.innerHTML = originalHTML;
+                    button.className = originalClasses;
+                    button.style.width = originalWidth;
                 }, 2000);
             }
             
@@ -1276,8 +1269,8 @@
                     ` : ''}
                     
                     <div class="reply-section">
-                        <button class="copy-btn" onclick="copyText('${ticket.id}', this)">
-                            <i class="fas fa-copy"></i> <span>نسخ النص</span>
+                        <button class="copy-btn" onclick="copyText('${ticket.id}', this)" title="نسخ النص">
+                            <i class="fas fa-copy"></i>
                         </button>
                         <div class="reply-box" id="reply-${ticket.id}">${escapeHtml(ticket.reply)}</div>
                     </div>
