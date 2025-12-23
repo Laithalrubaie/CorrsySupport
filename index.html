@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corrsy Support OS</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    
+    <style>
+        :root { --primary: #2563eb; --danger: #ef4444; --success: #10b981; --bg: #f3f4f6; --card: #ffffff; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #1f2937; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        
+        /* Navbar */
+        .navbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+        .admin-btn { background: none; border: none; cursor: pointer; color: #9ca3af; font-size: 0.9rem; }
+        
+        /* Search & Filters */
+        .search-box { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #e5e7eb; font-size: 1.1rem; box-sizing: border-box; margin-bottom: 15px; outline: none; transition: 0.2s; }
+        .search-box:focus { border-color: var(--primary); }
+        .filters { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px; }
+        .filter-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid #e5e7eb; background: white; cursor: pointer; white-space: nowrap; transition: 0.2s; }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* Admin Form (Hidden by default) */
+        #adminPanel { display: none; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 2px solid var(--primary); }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .full-width { grid-column: span 2; }
+        input, textarea, select { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+        .btn { padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; color: white; }
+        .btn-save { background: var(--primary); }
+        .btn-cancel { background: #6b7280; }
+
+        /* Cards Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: var(--card); padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; flex-direction: column; position: relative; border-top: 4px solid var(--primary); }
+        
+        /* Card Content */
+        .card-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px; }
+        .category-badge { font-size: 0.75rem; background: #e5e7eb; padding: 2px 8px; border-radius: 4px; color: #4b5563; }
+        .card h3 { margin: 0; font-size: 1.1rem; }
+        .agent-note { background: #fee2e2; color: #991b1b; padding: 8px; border-radius: 6px; font-size: 0.9rem; margin: 10px 0; }
+        .reply-box { background: #eff6ff; padding: 12px; border-radius: 8px; font-size: 0.95rem; line-height: 1.5; white-space: pre-wrap; margin-top: auto; border: 1px dashed #93c5fd; position: relative; }
+        
+        /* Actions */
+        .copy-btn { position: absolute; top: 10px; left: 10px; background: white; border: 1px solid #bfdbfe; color: var(--primary); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
+        .copy-btn:hover { background: var(--primary); color: white; }
+
+        /* Admin Actions (Edit/Delete) */
+        .admin-actions { display: none; margin-top: 10px; justify-content: flex-end; gap: 10px; }
+        .icon-btn { cursor: pointer; background: none; border: none; font-size: 1.2rem; opacity: 0.6; }
+        .icon-btn:hover { opacity: 1; }
+        
+        /* Login Modal */
+        #loginModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: white; padding: 30px; border-radius: 12px; width: 300px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div id="loginModal">
+    <div class="modal-content">
+        <h2>👨‍💻 Admin Login</h2>
+        <input type="email" id="email" placeholder="Email" style="margin-bottom: 10px;">
+        <input type="password" id="password" placeholder="Password" style="margin-bottom: 20px;">
+        <button onclick="login()" class="btn btn-save" style="width: 100%">Login</button>
+        <button onclick="document.getElementById('loginModal').style.display='none'" class="btn" style="margin-top: 10px; background: transparent; color: #666;">Cancel</button>
+    </div>
+</div>
+
+<div class="container">
+    <div class="navbar">
+        <div class="logo">🚀 Corrsy Support</div>
+        <button id="authBtn" onclick="toggleAuth()" class="admin-btn">Admin Login</button>
+    </div>
+
+    <div id="adminPanel">
+        <h3 id="formTitle">Add New Ticket</h3>
+        <input type="hidden" id="docId">
+        <div class="form-grid">
+            <input type="text" id="inpTitle" placeholder="Title (e.g., Huawei Problem)">
+            <select id="inpCategory">
+                <option value="code">Code & Activation</option>
+                <option value="login">Login & Account</option>
+                <option value="tech">Technical Issues</option>
+                <option value="content">Content/Lectures</option>
+                <option value="inquiry">Inquiries</option>
+            </select>
+            <input type="text" id="inpKeywords" placeholder="Keywords (space separated)" class="full-width">
+            <textarea id="inpNote" placeholder="Internal Note for Agents (Warning)" class="full-width" rows="2"></textarea>
+            <textarea id="inpReply" placeholder="The Script/Reply for the student" class="full-width" rows="4"></textarea>
+        </div>
+        <div style="text-align: left;">
+            <button onclick="saveTicket()" class="btn btn-save">Save to Database</button>
+            <button onclick="clearForm()" class="btn btn-cancel">Clear</button>
+        </div>
+    </div>
+
+    <input type="text" id="search" class="search-box" placeholder="🔎 Type to search... (e.g. Code, Slow, Login)" onkeyup="render()">
+    
+    <div class="filters">
+        <button class="filter-btn active" onclick="filter('all', this)">All</button>
+        <button class="filter-btn" onclick="filter('code', this)">Code</button>
+        <button class="filter-btn" onclick="filter('login', this)">Login</button>
+        <button class="filter-btn" onclick="filter('tech', this)">Tech</button>
+        <button class="filter-btn" onclick="filter('content', this)">Content</button>
+        <button class="filter-btn" onclick="filter('inquiry', this)">Inquiry</button>
+    </div>
+
+    <div id="grid" class="grid"></div>
+</div>
+
+<script>
+    // ==========================================
+    // 🔴 1. PASTE YOUR FIREBASE CONFIG HERE
+    // ==========================================
+    const firebaseConfig = {
+         apiKey: "AIzaSyA_dD-J3eELADFp1LTe6x2bcrnLw1G6hGI",
+
+  authDomain: "corrsysupport.firebaseapp.com",
+
+  projectId: "corrsysupport",
+
+  storageBucket: "corrsysupport.firebasestorage.app",
+
+  messagingSenderId: "926063390426",
+
+  appId: "1:926063390426:web:506905b8421a8b4ea3bfe3",
+    };
+    // ==========================================
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    let tickets = [];
+    let currentCategory = 'all';
+    let isAdmin = false;
+
+    // --- REALTIME LISTENER ---
+    // This runs automatically whenever the database changes
+    db.collection("tickets").onSnapshot((snapshot) => {
+        tickets = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        render(); // Update the screen instantly
+    });
+
+    // --- RENDER LOGIC ---
+    function render() {
+        const query = document.getElementById('search').value.toLowerCase();
+        const grid = document.getElementById('grid');
+        grid.innerHTML = '';
+
+        tickets.forEach(ticket => {
+            // Filter Logic
+            const matchSearch = ticket.title.toLowerCase().includes(query) || ticket.keywords.toLowerCase().includes(query);
+            const matchCat = currentCategory === 'all' || ticket.category === currentCategory;
+
+            if (matchSearch && matchCat) {
+                // Determine color
+                let color = '#2563eb';
+                if(ticket.category === 'code') color = '#10b981';
+                if(ticket.category === 'tech') color = '#ef4444';
+
+                // Create Card HTML
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.borderTopColor = color;
+                card.innerHTML = `
+                    <div class="card-header">
+                        <span class="category-badge">${ticket.category.toUpperCase()}</span>
+                        ${isAdmin ? `
+                        <div class="admin-actions" style="display:flex">
+                            <button onclick="editTicket('${ticket.id}')" class="icon-btn">✏️</button>
+                            <button onclick="deleteTicket('${ticket.id}')" class="icon-btn">🗑️</button>
+                        </div>` : ''}
+                    </div>
+                    <h3>${ticket.title}</h3>
+                    ${ticket.note ? `<div class="agent-note">⚠️ ${ticket.note}</div>` : ''}
+                    <div class="reply-box">
+                        <button class="copy-btn" onclick="copyText(this)">Copy</button>
+                        <span>${ticket.reply}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
+        });
+    }
+
+    // --- ADMIN FUNCTIONS ---
+    function saveTicket() {
+        const id = document.getElementById('docId').value;
+        const data = {
+            title: document.getElementById('inpTitle').value,
+            category: document.getElementById('inpCategory').value,
+            keywords: document.getElementById('inpKeywords').value,
+            note: document.getElementById('inpNote').value,
+            reply: document.getElementById('inpReply').value,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        if (id) {
+            db.collection("tickets").doc(id).update(data);
+        } else {
+            db.collection("tickets").add(data);
+        }
+        clearForm();
+    }
+
+    function editTicket(id) {
+        const t = tickets.find(x => x.id === id);
+        document.getElementById('docId').value = t.id;
+        document.getElementById('inpTitle').value = t.title;
+        document.getElementById('inpCategory').value = t.category;
+        document.getElementById('inpKeywords').value = t.keywords;
+        document.getElementById('inpNote').value = t.note;
+        document.getElementById('inpReply').value = t.reply;
+        document.getElementById('formTitle').innerText = "Edit Ticket";
+        window.scrollTo(0,0);
+    }
+
+    function deleteTicket(id) {
+        if(confirm("Are you sure you want to delete this script?")) {
+            db.collection("tickets").doc(id).delete();
+        }
+    }
+
+    function clearForm() {
+        document.getElementById('docId').value = '';
+        document.getElementById('inpTitle').value = '';
+        document.getElementById('inpKeywords').value = '';
+        document.getElementById('inpNote').value = '';
+        document.getElementById('inpReply').value = '';
+        document.getElementById('formTitle').innerText = "Add New Ticket";
+    }
+
+    // --- AUTHENTICATION ---
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            isAdmin = true;
+            document.getElementById('adminPanel').style.display = 'block';
+            document.getElementById('authBtn').innerText = 'Logout';
+            document.getElementById('loginModal').style.display = 'none';
+        } else {
+            isAdmin = false;
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('authBtn').innerText = 'Admin Login';
+        }
+        render();
+    });
+
+    function toggleAuth() {
+        if (isAdmin) {
+            auth.signOut();
+        } else {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+    }
+
+    function login() {
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('password').value;
+        auth.signInWithEmailAndPassword(email, pass).catch(e => alert(e.message));
+    }
+
+    // --- HELPERS ---
+    function filter(cat, btn) {
+        currentCategory = cat;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        render();
+    }
+
+    function copyText(btn) {
+        const text = btn.nextElementSibling.innerText;
+        navigator.clipboard.writeText(text);
+        btn.innerText = "Done! ✅";
+        setTimeout(() => btn.innerText = "Copy", 1500);
+    }
+</script>
+
+</body>
+</html>
