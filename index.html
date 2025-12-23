@@ -57,6 +57,26 @@
         /* Login Modal */
         #loginModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: white; padding: 30px; border-radius: 12px; width: 300px; text-align: center; }
+
+        /* Add this to your <style> section */
+.card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.sla-badge {
+    background: #fffbeb;
+    color: #b45309;
+    border: 1px solid #fcd34d;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
     </style>
 </head>
 <body>
@@ -149,38 +169,46 @@
         render(); // Update the screen instantly
     });
 
-    // --- RENDER LOGIC ---
+  // --- UPDATED RENDER FUNCTION ---
     function render() {
         const query = document.getElementById('search').value.toLowerCase();
         const grid = document.getElementById('grid');
         grid.innerHTML = '';
 
+        // 1. SORTING LOGIC: SOP (1,2,3) first, then others
+        tickets.sort((a, b) => (a.order || 999) - (b.order || 999));
+
         tickets.forEach(ticket => {
-            // Filter Logic
             const matchSearch = ticket.title.toLowerCase().includes(query) || ticket.keywords.toLowerCase().includes(query);
             const matchCat = currentCategory === 'all' || ticket.category === currentCategory;
 
             if (matchSearch && matchCat) {
-                // Determine color
-                let color = '#2563eb';
-                if(ticket.category === 'code') color = '#10b981';
-                if(ticket.category === 'tech') color = '#ef4444';
+                // Color Coding
+                let color = '#2563eb'; // Default Blue
+                if(ticket.category === 'code') color = '#10b981'; // Green
+                if(ticket.category === 'tech') color = '#ef4444'; // Red
+                if(ticket.category === 'sop') color = '#8b5cf6'; // Purple
 
-                // Create Card HTML
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.style.borderTopColor = color;
+                
+                // HTML Construction
                 card.innerHTML = `
-                    <div class="card-header">
+                    <div class="card-meta">
                         <span class="category-badge">${ticket.category.toUpperCase()}</span>
+                        ${ticket.sla ? `<span class="sla-badge">⏱️ SLA: ${ticket.sla}</span>` : ''}
                         ${isAdmin ? `
-                        <div class="admin-actions" style="display:flex">
+                        <div class="admin-actions">
                             <button onclick="editTicket('${ticket.id}')" class="icon-btn">✏️</button>
                             <button onclick="deleteTicket('${ticket.id}')" class="icon-btn">🗑️</button>
                         </div>` : ''}
                     </div>
+                    
                     <h3>${ticket.title}</h3>
+                    
                     ${ticket.note ? `<div class="agent-note">⚠️ ${ticket.note}</div>` : ''}
+                    
                     <div class="reply-box">
                         <button class="copy-btn" onclick="copyText(this)">Copy</button>
                         <span>${ticket.reply}</span>
@@ -190,7 +218,6 @@
             }
         });
     }
-
     // --- ADMIN FUNCTIONS ---
     function saveTicket() {
         const id = document.getElementById('docId').value;
