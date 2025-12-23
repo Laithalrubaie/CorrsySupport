@@ -457,30 +457,40 @@
             direction: rtl;
         }
         
+        /* FIXED COPY BUTTON - Smaller and better positioned */
         .copy-btn {
             position: absolute;
-            top: 10px;
+            top: 8px;
             left: auto;
-            right: 10px;
+            right: 8px;
             background: white;
             border: 1px solid var(--border);
             color: var(--primary);
-            padding: 8px 16px;
+            padding: 6px 12px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             transition: all 0.2s;
             z-index: 10;
             box-shadow: var(--shadow);
             font-family: inherit;
+            font-size: 0.8rem;
+            white-space: nowrap;
         }
         
         .copy-btn:hover {
             background: var(--primary);
             color: white;
+            transform: translateY(-1px);
+        }
+        
+        .copy-btn.copied {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
         }
         
         .card-footer {
@@ -725,6 +735,30 @@
             
             .debug-panel {
                 display: none;
+            }
+            
+            .copy-btn {
+                padding: 4px 8px;
+                font-size: 0.75rem;
+                gap: 3px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .copy-btn span {
+                display: none;
+            }
+            
+            .copy-btn {
+                width: 32px;
+                height: 32px;
+                padding: 0;
+                justify-content: center;
+                border-radius: 50%;
+            }
+            
+            .copy-btn i {
+                margin: 0;
             }
         }
         
@@ -1096,6 +1130,43 @@
     }
     
     // ==========================================
+    // IMPROVED COPY TEXT FUNCTION
+    // ==========================================
+    function copyText(ticketId, button) {
+        const replyElement = document.getElementById(`reply-${ticketId}`);
+        if (!replyElement) {
+            debugLog(`Reply element not found for ticket: ${ticketId}`, 'error');
+            return;
+        }
+        
+        const text = replyElement.textContent;
+        
+        debugLog(`Copying text from ticket: ${ticketId}`, 'info');
+        
+        navigator.clipboard.writeText(text).then(() => {
+            debugLog('Text copied to clipboard', 'success');
+            
+            // Visual feedback on button
+            if (button) {
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> <span>تم النسخ</span>';
+                button.classList.add('copied');
+                
+                // Reset button after 2 seconds
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }
+            
+            showToast("تم نسخ نص الرد إلى الحافظة!", "success");
+        }).catch(err => {
+            debugLog(`Failed to copy text: ${err.message}`, 'error');
+            showToast("فشل نسخ النص", "danger");
+        });
+    }
+    
+    // ==========================================
     // RENDER FUNCTION - FIXED
     // ==========================================
     function render() {
@@ -1205,8 +1276,8 @@
                     ` : ''}
                     
                     <div class="reply-section">
-                        <button class="copy-btn" onclick="copyText('${ticket.id}')">
-                            <i class="fas fa-copy"></i> نسخ النص
+                        <button class="copy-btn" onclick="copyText('${ticket.id}', this)">
+                            <i class="fas fa-copy"></i> <span>نسخ النص</span>
                         </button>
                         <div class="reply-box" id="reply-${ticket.id}">${escapeHtml(ticket.reply)}</div>
                     </div>
@@ -1522,26 +1593,6 @@
             default:
                 return array.sort((a, b) => (a.order || 999) - (b.order || 999));
         }
-    }
-    
-    function copyText(ticketId) {
-        const replyElement = document.getElementById(`reply-${ticketId}`);
-        if (!replyElement) {
-            debugLog(`Reply element not found for ticket: ${ticketId}`, 'error');
-            return;
-        }
-        
-        const text = replyElement.textContent;
-        
-        debugLog(`Copying text from ticket: ${ticketId}`, 'info');
-        
-        navigator.clipboard.writeText(text).then(() => {
-            debugLog('Text copied to clipboard', 'success');
-            showToast("تم نسخ نص الرد إلى الحافظة!", "success");
-        }).catch(err => {
-            debugLog(`Failed to copy text: ${err.message}`, 'error');
-            showToast("فشل نسخ النص", "danger");
-        });
     }
     
     function updateStats() {
