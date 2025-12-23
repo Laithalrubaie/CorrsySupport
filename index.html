@@ -34,12 +34,13 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Noto Sans Arabic', sans-serif;
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
             min-height: 100vh;
             padding: 20px;
+            direction: rtl;
         }
         
         .container {
@@ -129,6 +130,8 @@
             background: white;
             transition: all 0.3s;
             box-shadow: var(--shadow);
+            font-family: inherit;
+            direction: rtl;
         }
         
         .search-box:focus {
@@ -139,7 +142,8 @@
         
         .search-icon {
             position: absolute;
-            left: 20px;
+            right: 20px;
+            left: auto;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-light);
@@ -176,6 +180,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            font-family: inherit;
         }
         
         .filter-btn:hover {
@@ -251,6 +256,7 @@
             font-family: inherit;
             font-size: 1rem;
             transition: border-color 0.2s;
+            direction: rtl;
         }
         
         input:focus, textarea:focus, select:focus {
@@ -262,10 +268,11 @@
         textarea {
             resize: vertical;
             min-height: 120px;
+            font-family: inherit;
         }
         
         .char-count {
-            text-align: left;
+            text-align: right;
             font-size: 0.85rem;
             color: var(--text-light);
             margin-top: 5px;
@@ -288,6 +295,7 @@
             align-items: center;
             gap: 8px;
             transition: all 0.2s;
+            font-family: inherit;
         }
         
         .btn-save {
@@ -336,6 +344,7 @@
             border: 1px solid var(--border);
             background: white;
             font-family: inherit;
+            direction: rtl;
         }
         
         .grid {
@@ -391,6 +400,7 @@
             color: var(--text);
             margin: 0;
             line-height: 1.4;
+            text-align: right;
         }
         
         .keywords {
@@ -398,6 +408,7 @@
             flex-wrap: wrap;
             gap: 8px;
             margin-top: 5px;
+            justify-content: flex-end;
         }
         
         .keyword {
@@ -406,11 +417,12 @@
             padding: 4px 10px;
             border-radius: 20px;
             font-size: 0.8rem;
+            text-align: center;
         }
         
         .agent-note {
             background: #fef3c7;
-            border-left: 4px solid var(--warning);
+            border-right: 4px solid var(--warning);
             padding: 12px 16px;
             border-radius: 6px;
             font-size: 0.9rem;
@@ -418,6 +430,8 @@
             display: flex;
             align-items: flex-start;
             gap: 10px;
+            text-align: right;
+            direction: rtl;
         }
         
         .agent-note i {
@@ -439,12 +453,15 @@
             white-space: pre-wrap;
             position: relative;
             min-height: 150px;
+            text-align: right;
+            direction: rtl;
         }
         
         .copy-btn {
             position: absolute;
             top: 10px;
-            left: 10px;
+            left: auto;
+            right: 10px;
             background: white;
             border: 1px solid var(--border);
             color: var(--primary);
@@ -458,6 +475,7 @@
             transition: all 0.2s;
             z-index: 10;
             box-shadow: var(--shadow);
+            font-family: inherit;
         }
         
         .copy-btn:hover {
@@ -521,6 +539,7 @@
             display: none;
             position: fixed;
             top: 0;
+            right: 0;
             left: 0;
             width: 100%;
             height: 100%;
@@ -544,6 +563,7 @@
             max-width: 400px;
             box-shadow: var(--shadow-lg);
             animation: slideUp 0.3s;
+            direction: rtl;
         }
         
         @keyframes slideUp {
@@ -573,6 +593,7 @@
             border-radius: 8px;
             margin-bottom: 15px;
             font-size: 1rem;
+            direction: rtl;
         }
         
         .modal-actions {
@@ -584,7 +605,8 @@
         .toast {
             position: fixed;
             bottom: 30px;
-            right: 30px;
+            left: 30px;
+            right: auto;
             background: var(--success);
             color: white;
             padding: 15px 25px;
@@ -599,7 +621,7 @@
         }
         
         @keyframes slideInRight {
-            from { transform: translateX(100px); opacity: 0; }
+            from { transform: translateX(-100px); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
         
@@ -633,6 +655,8 @@
             font-size: 0.9rem;
             max-height: 200px;
             overflow-y: auto;
+            direction: ltr;
+            text-align: left;
         }
         
         .debug-header {
@@ -727,12 +751,12 @@
         .category-inquiry { background: #ede9fe; color: #5b21b6; }
         .category-sop { background: #f0abfc; color: #86198f; }
         
-        .card.category-code { border-left: 5px solid #10b981; }
-        .card.category-login { border-left: 5px solid #3b82f6; }
-        .card.category-tech { border-left: 5px solid #ef4444; }
-        .card.category-content { border-left: 5px solid #f59e0b; }
-        .card.category-inquiry { border-left: 5px solid #8b5cf6; }
-        .card.category-sop { border-left: 5px solid #d946ef; }
+        .card.category-code { border-left: none; border-right: 5px solid #10b981; }
+        .card.category-login { border-left: none; border-right: 5px solid #3b82f6; }
+        .card.category-tech { border-left: none; border-right: 5px solid #ef4444; }
+        .card.category-content { border-left: none; border-right: 5px solid #f59e0b; }
+        .card.category-inquiry { border-left: none; border-right: 5px solid #8b5cf6; }
+        .card.category-sop { border-left: none; border-right: 5px solid #d946ef; }
     </style>
 </head>
 <body>
@@ -1030,7 +1054,13 @@
                         id: doc.id, 
                         ...data,
                         timestamp: data.timestamp ? data.timestamp.toDate() : new Date(),
-                        order: data.order || 999
+                        order: data.order || 999,
+                        title: data.title || 'No Title',
+                        keywords: data.keywords || '',
+                        note: data.note || '',
+                        reply: data.reply || 'No reply script provided',
+                        category: data.category || 'inquiry',
+                        sla: data.sla || ''
                     };
                 });
                 
@@ -1052,13 +1082,13 @@
                         </div>
                         <div class="empty-title">Connection Error</div>
                         <p>Failed to load tickets. Please check:</p>
-                        <ol style="text-align: left; margin: 15px auto; max-width: 300px;">
-                            <li>Internet connection</li>
-                            <li>Firebase configuration</li>
-                            <li>Firestore security rules</li>
+                        <ol style="text-align: right; margin: 15px auto; max-width: 300px; direction: rtl;">
+                            <li>اتصال الإنترنت</li>
+                            <li>إعدادات Firebase</li>
+                            <li>قواعد الأمان في Firestore</li>
                         </ol>
                         <button onclick="setupFirebaseListener()" class="btn btn-save" style="margin-top: 20px;">
-                            <i class="fas fa-sync-alt"></i> Retry Connection
+                            <i class="fas fa-sync-alt"></i> إعادة المحاولة
                         </button>
                     </div>
                 `;
@@ -1066,7 +1096,7 @@
     }
     
     // ==========================================
-    // RENDER FUNCTION
+    // RENDER FUNCTION - FIXED
     // ==========================================
     function render() {
         debugLog('Rendering tickets...', 'info');
@@ -1076,15 +1106,22 @@
         const grid = document.getElementById('grid');
         
         // Hide loading state
-        document.getElementById('loadingState').style.display = 'none';
+        const loadingState = document.getElementById('loadingState');
+        if (loadingState) loadingState.style.display = 'none';
         
         // Filter tickets
         let filteredTickets = tickets.filter(ticket => {
+            // Handle null/undefined values
+            const title = ticket.title || '';
+            const keywords = ticket.keywords || '';
+            const note = ticket.note || '';
+            const reply = ticket.reply || '';
+            
             const matchSearch = 
-                (ticket.title && ticket.title.toLowerCase().includes(query)) ||
-                (ticket.keywords && ticket.keywords.toLowerCase().includes(query)) ||
-                (ticket.note && ticket.note.toLowerCase().includes(query)) ||
-                (ticket.reply && ticket.reply.toLowerCase().includes(query));
+                title.toLowerCase().includes(query) ||
+                keywords.toLowerCase().includes(query) ||
+                note.toLowerCase().includes(query) ||
+                reply.toLowerCase().includes(query);
             
             const matchCat = currentCategory === 'all' || ticket.category === currentCategory;
             
@@ -1097,8 +1134,11 @@
         filteredTickets = sortTicketArray(filteredTickets, currentSort);
         
         // Update results count
-        document.getElementById('resultsCount').textContent = 
-            `${filteredTickets.length} ticket${filteredTickets.length !== 1 ? 's' : ''} found`;
+        const resultsCount = document.getElementById('resultsCount');
+        if (resultsCount) {
+            resultsCount.textContent = 
+                `${filteredTickets.length} تذكرة${filteredTickets.length !== 1 ? '' : ''}`;
+        }
         
         // Clear grid
         grid.innerHTML = '';
@@ -1110,9 +1150,9 @@
                     <div class="empty-icon">
                         <i class="fas fa-inbox"></i>
                     </div>
-                    <div class="empty-title">No tickets found</div>
-                    <p>Try a different search term or category filter</p>
-                    ${isAdmin ? '<button onclick="clearForm()" class="btn btn-save" style="margin-top: 20px;"><i class="fas fa-plus"></i> Create New Ticket</button>' : ''}
+                    <div class="empty-title">لا توجد تذاكر</div>
+                    <p>جرب مصطلح بحث مختلف أو فلتر مختلف</p>
+                    ${isAdmin ? '<button onclick="clearForm()" class="btn btn-save" style="margin-top: 20px;"><i class="fas fa-plus"></i> إنشاء تذكرة جديدة</button>' : ''}
                 </div>
             `;
             return;
@@ -1126,10 +1166,18 @@
             card.className = `card category-${ticket.category}`;
             
             // Format timestamp
-            const timestamp = ticket.timestamp ? formatDate(ticket.timestamp) : 'Recently added';
+            const timestamp = ticket.timestamp ? formatDate(ticket.timestamp) : 'مضاف حديثاً';
             
             // Format keywords
-            const keywords = ticket.keywords ? ticket.keywords.split(',').map(k => k.trim()) : [];
+            const keywords = ticket.keywords ? ticket.keywords.split(',').map(k => k.trim()).filter(k => k) : [];
+            
+            // Escape HTML to prevent XSS and handle special characters
+            const escapeHtml = (text) => {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            };
             
             card.innerHTML = `
                 <div class="card-header">
@@ -1137,30 +1185,30 @@
                         <i class="fas fa-${getCategoryIcon(ticket.category)}"></i>
                         ${getCategoryName(ticket.category)}
                     </span>
-                    ${ticket.sla ? `<span style="font-size: 0.85rem; color: var(--warning); font-weight: 600;"><i class="fas fa-clock"></i> ${ticket.sla}</span>` : ''}
+                    ${ticket.sla ? `<span style="font-size: 0.85rem; color: var(--warning); font-weight: 600;"><i class="fas fa-clock"></i> ${escapeHtml(ticket.sla)}</span>` : ''}
                 </div>
                 
                 <div class="card-content">
-                    <h3 class="card-title">${ticket.title || 'No Title'}</h3>
+                    <h3 class="card-title">${escapeHtml(ticket.title)}</h3>
                     
                     ${keywords.length > 0 ? `
                     <div class="keywords">
-                        ${keywords.map(keyword => `<span class="keyword">${keyword}</span>`).join('')}
+                        ${keywords.map(keyword => `<span class="keyword">${escapeHtml(keyword)}</span>`).join('')}
                     </div>
                     ` : ''}
                     
                     ${ticket.note ? `
                     <div class="agent-note">
                         <i class="fas fa-exclamation-circle"></i>
-                        <div>${ticket.note}</div>
+                        <div>${escapeHtml(ticket.note)}</div>
                     </div>
                     ` : ''}
                     
                     <div class="reply-section">
                         <button class="copy-btn" onclick="copyText('${ticket.id}')">
-                            <i class="fas fa-copy"></i> Copy Script
+                            <i class="fas fa-copy"></i> نسخ النص
                         </button>
-                        <div class="reply-box" id="reply-${ticket.id}">${ticket.reply || 'No reply script provided'}</div>
+                        <div class="reply-box" id="reply-${ticket.id}">${escapeHtml(ticket.reply)}</div>
                     </div>
                 </div>
                 
@@ -1171,10 +1219,10 @@
                     </div>
                     ${isAdmin ? `
                     <div class="admin-actions">
-                        <button onclick="editTicket('${ticket.id}')" class="icon-btn edit" title="Edit">
+                        <button onclick="editTicket('${ticket.id}')" class="icon-btn edit" title="تعديل">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button onclick="deleteTicketPrompt('${ticket.id}')" class="icon-btn delete" title="Delete">
+                        <button onclick="deleteTicketPrompt('${ticket.id}')" class="icon-btn delete" title="حذف">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -1201,13 +1249,13 @@
         const reply = document.getElementById('inpReply').value.trim();
         
         if (!title) {
-            showToast("Please enter a title", "danger");
+            showToast("الرجاء إدخال عنوان", "danger");
             document.getElementById('inpTitle').focus();
             return;
         }
         
         if (!reply) {
-            showToast("Please enter a reply script", "danger");
+            showToast("الرجاء إدخال نص الرد", "danger");
             document.getElementById('inpReply').focus();
             return;
         }
@@ -1235,7 +1283,7 @@
         
         // Show loading state
         saveBtn.disabled = true;
-        saveBtnText.innerHTML = '<span class="spinner"></span> Saving...';
+        saveBtnText.innerHTML = '<span class="spinner"></span> جاري الحفظ...';
         
         // Save to Firestore
         try {
@@ -1249,23 +1297,23 @@
                     if (!id) {
                         debugLog(`New ticket ID: ${docRef.id}`, 'success');
                     }
-                    showToast(id ? "Ticket updated successfully" : "Ticket added successfully", "success");
+                    showToast(id ? "تم تحديث التذكرة بنجاح" : "تم إضافة التذكرة بنجاح", "success");
                     clearForm();
                 })
                 .catch(error => {
                     debugLog(`Error saving ticket: ${error.message}`, 'error');
                     debugLog(`Error code: ${error.code}`, 'error');
-                    showToast("Error saving ticket: " + error.message, "danger");
+                    showToast("خطأ في حفظ التذكرة: " + error.message, "danger");
                 })
                 .finally(() => {
                     saveBtn.disabled = false;
-                    saveBtnText.textContent = id ? "Update Ticket" : "Save to Database";
+                    saveBtnText.textContent = id ? "تحديث التذكرة" : "حفظ في قاعدة البيانات";
                 });
         } catch (error) {
             debugLog(`Exception in saveTicket: ${error.message}`, 'error');
             saveBtn.disabled = false;
-            saveBtnText.textContent = id ? "Update Ticket" : "Save to Database";
-            showToast("Error: " + error.message, "danger");
+            saveBtnText.textContent = id ? "تحديث التذكرة" : "حفظ في قاعدة البيانات";
+            showToast("خطأ: " + error.message, "danger");
         }
     }
     
@@ -1275,7 +1323,7 @@
         
         if (!ticket) {
             debugLog(`Ticket ${id} not found in memory`, 'error');
-            showToast("Ticket not found", "danger");
+            showToast("التذكرة غير موجودة", "danger");
             return;
         }
         
@@ -1288,8 +1336,8 @@
         document.getElementById('inpSLA').value = ticket.sla || '';
         document.getElementById('inpOrder').value = ticket.order || 999;
         
-        document.getElementById('formTitle').innerHTML = '<i class="fas fa-edit"></i> Edit Ticket';
-        document.getElementById('saveBtnText').textContent = "Update Ticket";
+        document.getElementById('formTitle').innerHTML = '<i class="fas fa-edit"></i> تعديل التذكرة';
+        document.getElementById('saveBtnText').textContent = "تحديث التذكرة";
         document.getElementById('deleteBtn').style.display = 'flex';
         
         // Show admin panel and scroll to top
@@ -1307,7 +1355,7 @@
     function deleteTicketPrompt(id) {
         debugLog(`Delete prompt for ticket: ${id}`, 'info');
         
-        if (!confirm("Are you sure you want to delete this ticket? This action cannot be undone.")) {
+        if (!confirm("هل أنت متأكد من حذف هذه التذكرة؟ لا يمكن التراجع عن هذا الإجراء.")) {
             return;
         }
         
@@ -1316,12 +1364,12 @@
         db.collection("tickets").doc(id).delete()
             .then(() => {
                 debugLog(`Ticket ${id} deleted successfully`, 'success');
-                showToast("Ticket deleted successfully", "success");
+                showToast("تم حذف التذكرة بنجاح", "success");
             })
             .catch(error => {
                 debugLog(`Error deleting ticket: ${error.message}`, 'error');
                 debugLog(`Error code: ${error.code}`, 'error');
-                showToast("Error deleting ticket: " + error.message, "danger");
+                showToast("خطأ في حذف التذكرة: " + error.message, "danger");
             });
     }
     
@@ -1348,8 +1396,8 @@
         document.getElementById('inpSLA').value = '';
         document.getElementById('inpOrder').value = 999;
         
-        document.getElementById('formTitle').innerHTML = '<i class="fas fa-plus-circle"></i> Add New Ticket';
-        document.getElementById('saveBtnText').textContent = "Save to Database";
+        document.getElementById('formTitle').innerHTML = '<i class="fas fa-plus-circle"></i> إضافة تذكرة جديدة';
+        document.getElementById('saveBtnText').textContent = "حفظ في قاعدة البيانات";
         document.getElementById('deleteBtn').style.display = 'none';
         
         updateCharCount('inpTitle', 'titleCount', 100);
@@ -1364,17 +1412,17 @@
         if (user) {
             isAdmin = true;
             document.getElementById('adminPanel').style.display = 'block';
-            document.getElementById('authBtnText').textContent = 'Logout';
+            document.getElementById('authBtnText').textContent = 'تسجيل الخروج';
             document.getElementById('authBtn').classList.add('logout');
-            document.getElementById('authBtn').innerHTML = '<i class="fas fa-sign-out-alt"></i> <span id="authBtnText">Logout</span>';
+            document.getElementById('authBtn').innerHTML = '<i class="fas fa-sign-out-alt"></i> <span id="authBtnText">تسجيل الخروج</span>';
             closeLoginModal();
             debugLog(`User authenticated: ${user.email}`, 'success');
         } else {
             isAdmin = false;
             document.getElementById('adminPanel').style.display = 'none';
-            document.getElementById('authBtnText').textContent = 'Admin Login';
+            document.getElementById('authBtnText').textContent = 'دخول المدير';
             document.getElementById('authBtn').classList.remove('logout');
-            document.getElementById('authBtn').innerHTML = '<i class="fas fa-sign-in-alt"></i> <span id="authBtnText">Admin Login</span>';
+            document.getElementById('authBtn').innerHTML = '<i class="fas fa-sign-in-alt"></i> <span id="authBtnText">دخول المدير</span>';
             debugLog('User not authenticated', 'info');
         }
         render();
@@ -1384,7 +1432,7 @@
         if (isAdmin) {
             debugLog('Logging out...', 'info');
             auth.signOut();
-            showToast("Logged out successfully", "success");
+            showToast("تم تسجيل الخروج بنجاح", "success");
         } else {
             openLoginModal();
         }
@@ -1412,7 +1460,7 @@
         const loginSpinner = document.getElementById('loginSpinner');
         
         if (!email || !password) {
-            document.getElementById('loginError').textContent = "Please enter email and password";
+            document.getElementById('loginError').textContent = "الرجاء إدخال البريد الإلكتروني وكلمة المرور";
             document.getElementById('loginError').style.display = 'block';
             debugLog('Login attempted with empty fields', 'error');
             return;
@@ -1469,7 +1517,7 @@
             case 'oldest':
                 return array.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
             case 'title':
-                return array.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+                return array.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'ar'));
             case 'order':
             default:
                 return array.sort((a, b) => (a.order || 999) - (b.order || 999));
@@ -1478,29 +1526,41 @@
     
     function copyText(ticketId) {
         const replyElement = document.getElementById(`reply-${ticketId}`);
+        if (!replyElement) {
+            debugLog(`Reply element not found for ticket: ${ticketId}`, 'error');
+            return;
+        }
+        
         const text = replyElement.textContent;
         
         debugLog(`Copying text from ticket: ${ticketId}`, 'info');
         
         navigator.clipboard.writeText(text).then(() => {
             debugLog('Text copied to clipboard', 'success');
-            showToast("Reply script copied to clipboard!", "success");
+            showToast("تم نسخ نص الرد إلى الحافظة!", "success");
         }).catch(err => {
             debugLog(`Failed to copy text: ${err.message}`, 'error');
-            showToast("Failed to copy text", "danger");
+            showToast("فشل نسخ النص", "danger");
         });
     }
     
     function updateStats() {
-        document.getElementById('totalTickets').textContent = tickets.length;
-        const sopCount = tickets.filter(t => t.category === 'sop').length;
-        document.getElementById('sopCount').textContent = sopCount;
-        debugLog(`Stats updated: ${tickets.length} total, ${sopCount} SOP`, 'info');
+        const totalTickets = document.getElementById('totalTickets');
+        const sopCount = document.getElementById('sopCount');
+        
+        if (totalTickets) totalTickets.textContent = tickets.length;
+        if (sopCount) {
+            const sopCountValue = tickets.filter(t => t.category === 'sop').length;
+            sopCount.textContent = sopCountValue;
+        }
+        debugLog(`Stats updated: ${tickets.length} total, ${tickets.filter(t => t.category === 'sop').length} SOP`, 'info');
     }
     
     function updateCharCount(inputId, countId, max) {
         const input = document.getElementById(inputId);
         const count = document.getElementById(countId);
+        if (!input || !count) return;
+        
         const length = input.value.length;
         count.textContent = `${length}/${max}`;
         
@@ -1523,13 +1583,13 @@
         const diffDays = Math.floor(diffMs / 86400000);
         
         if (diffMins < 60) {
-            return `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`;
+            return `منذ ${diffMins} دقيقة${diffMins !== 1 ? '' : ''}`;
         } else if (diffHours < 24) {
-            return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+            return `منذ ${diffHours} ساعة${diffHours !== 1 ? '' : ''}`;
         } else if (diffDays < 7) {
-            return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+            return `منذ ${diffDays} يوم${diffDays !== 1 ? '' : ''}`;
         } else {
-            return date.toLocaleDateString('en-US', { 
+            return date.toLocaleDateString('ar-SA', { 
                 year: 'numeric', 
                 month: 'short', 
                 day: 'numeric' 
@@ -1565,6 +1625,8 @@
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toastMessage');
         
+        if (!toast || !toastMessage) return;
+        
         // Set color based on type
         if (type === 'success') {
             toast.style.background = 'var(--success)';
@@ -1596,26 +1658,39 @@
         
         // Search input with debounce
         let searchTimer;
-        document.getElementById('search').addEventListener('input', function() {
-            clearTimeout(searchTimer);
-            searchTimer = setTimeout(() => {
-                debugLog(`Search query: ${this.value}`, 'info');
-                render();
-            }, 300);
-        });
+        const searchInput = document.getElementById('search');
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(() => {
+                    debugLog(`Search query: ${this.value}`, 'info');
+                    render();
+                }, 300);
+            });
+        }
         
         // Character count listeners
-        document.getElementById('inpTitle').addEventListener('input', function() {
-            updateCharCount('inpTitle', 'titleCount', 100);
-        });
+        const titleInput = document.getElementById('inpTitle');
+        const noteInput = document.getElementById('inpNote');
+        const replyInput = document.getElementById('inpReply');
         
-        document.getElementById('inpNote').addEventListener('input', function() {
-            updateCharCount('inpNote', 'noteCount', 500);
-        });
+        if (titleInput) {
+            titleInput.addEventListener('input', function() {
+                updateCharCount('inpTitle', 'titleCount', 100);
+            });
+        }
         
-        document.getElementById('inpReply').addEventListener('input', function() {
-            updateCharCount('inpReply', 'replyCount', 2000);
-        });
+        if (noteInput) {
+            noteInput.addEventListener('input', function() {
+                updateCharCount('inpNote', 'noteCount', 500);
+            });
+        }
+        
+        if (replyInput) {
+            replyInput.addEventListener('input', function() {
+                updateCharCount('inpReply', 'replyCount', 2000);
+            });
+        }
         
         // Close modal on ESC
         document.addEventListener('keydown', function(event) {
@@ -1625,11 +1700,14 @@
         });
         
         // Close modal on outside click
-        document.getElementById('loginModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeLoginModal();
-            }
-        });
+        const loginModal = document.getElementById('loginModal');
+        if (loginModal) {
+            loginModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeLoginModal();
+                }
+            });
+        }
         
         // Test button to add sample data
         document.addEventListener('keydown', function(event) {
@@ -1655,12 +1733,12 @@
         debugLog('Adding test ticket...', 'info');
         
         const testData = {
-            title: "Test Ticket - Code Activation Issue",
+            title: "تذكرة تجريبية - مشكلة تفعيل الكود",
             category: "code",
-            keywords: "test, activation, code, huawei",
-            note: "This is a test note for agents",
-            reply: "Dear student,\n\nThank you for contacting support. Please follow these steps:\n1. Check your email for the activation code\n2. Enter the code in the activation field\n3. Click 'Activate'\n\nIf you still face issues, please reply with a screenshot.",
-            sla: "2 hours",
+            keywords: "اختبار, تفعيل, كود, هواوي",
+            note: "هذه ملاحظة تجريبية للوكلاء",
+            reply: "عزيزي الطالب،\n\nشكراً لتواصلك مع الدعم. يرجى اتباع هذه الخطوات:\n1. تحقق من بريدك الإلكتروني للحصول على كود التفعيل\n2. أدخل الكود في حقل التفعيل\n3. انقر على 'تفعيل'\n\nإذا واجهت مشكلة، يرجى الرد مع لقطة شاشة.",
+            sla: "ساعتين",
             order: 1,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -1670,11 +1748,11 @@
         db.collection("tickets").add(testData)
             .then((docRef) => {
                 debugLog(`Test ticket added with ID: ${docRef.id}`, 'success');
-                showToast("Test ticket added successfully", "success");
+                showToast("تم إضافة تذكرة تجريبية بنجاح", "success");
             })
             .catch(error => {
                 debugLog(`Error adding test ticket: ${error.message}`, 'error');
-                showToast("Error adding test ticket", "danger");
+                showToast("خطأ في إضافة التذكرة التجريبية", "danger");
             });
     }
 </script>
